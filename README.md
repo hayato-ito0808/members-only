@@ -1,24 +1,114 @@
 # README
+# 🕵️‍♂️ Anonymous Clubhouse
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 📌 概要
 
-Things you may want to cover:
+このアプリは、**匿名で投稿できるクローズドなクラブハウス**です。
+ログインしているメンバー同士では投稿者を確認できますが、外部からは投稿内容のみが表示され、誰が書いたかは分かりません。
 
-* Ruby version
+---
 
-* System dependencies
+## 🎯 目的
 
-* Configuration
+* 匿名性を保ちながら安心して投稿できる環境を提供する
+* メンバー間では信頼性を担保する（誰が投稿したか分かる）
 
-* Database creation
+---
 
-* Database initialization
+## 🧩 主な機能
 
-* How to run the test suite
+### 👤 ユーザー機能
 
-* Services (job queues, cache servers, search engines, etc.)
+* ユーザー登録（サインアップ）
+* ログイン / ログアウト
+* 権限管理（一般ユーザー / 管理者）
 
-* Deployment instructions
+### 📝 投稿機能
 
-* ...
+* 投稿の作成
+* 投稿一覧表示
+* 投稿者情報の表示制御
+
+  * ログインユーザー → 投稿者が見える
+  * 未ログインユーザー → 匿名表示
+
+---
+
+## 🔐 認証・セキュリティ
+
+* `has_secure_password` によるパスワード管理
+* `password_digest` によるハッシュ化保存
+* セッションによるログイン状態の管理
+
+---
+
+## 🏗️ データベース設計
+
+### Users テーブル
+
+| カラム名            | 型       | 説明                 |
+| --------------- | ------- | ------------------ |
+| name            | string  | ユーザー名              |
+| email           | string  | メールアドレス            |
+| password_digest | string  | パスワード（ハッシュ）        |
+| authority       | integer | 権限（0: 一般 / 1: 管理者） |
+
+---
+
+### Posts テーブル
+
+| カラム名    | 型       | 説明    |
+| ------- | ------- | ----- |
+| user_id | integer | 投稿者ID |
+| content | text    | 投稿内容  |
+
+---
+
+## 🔗 アソシエーション
+
+```ruby
+# User
+has_many :posts
+
+# Post
+belongs_to :user
+```
+
+---
+
+## ⚙️ 技術スタック
+
+* Ruby on Rails
+* PostgreSQL
+* HTML / ERB
+
+---
+
+## 💡 特徴
+
+* 匿名性と信頼性を両立した設計
+* シンプルな認証機構（セッションベース）
+* Railsの基本機能を活用した構成
+
+---
+
+## 🚀 今後の改善案
+
+* いいね機能
+* コメント機能
+* 通報・モデレーション機能
+* Devise導入による認証強化
+
+---
+
+## 👨‍💻 開発者向けメモ
+
+* 匿名表示はDBではなくビューで制御
+* 権限は `enum` で管理
+* セキュリティのためパスワードは平文保存しない
+
+---
+
+## 📣 一言
+
+「**匿名だからこそ本音が言える。でも責任も持てる場所**」
